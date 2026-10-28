@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import z from '@deepseek-ai/schemastery'
 
 /** One immutable skill provider that teaches the publish workflow. */
 const PROVIDER_NAME = 'dsh-plugin-publisher'
@@ -12,9 +13,9 @@ const RESOURCE_BASE = {
   path: fileURLToPath(new URL('./assets/', import.meta.url)),
 }
 
-/** User-editable publisher settings; the release script reads the same file. */
+/** User-editable publisher settings, mirrored to a JSON file for the release script. */
 const CONFIG_PATH = path.join(homedir(), '.dsh', 'dsh-plugin-publisher.json')
-const CONFIG_DEFAULTS = {
+const CONFIG_FALLBACK = {
   tokenFile: path.join(homedir(), '.dsh', 'npm-token'),
   registry: 'https://registry.npmjs.org/',
   repo: '',
@@ -23,11 +24,31 @@ const CONFIG_DEFAULTS = {
   bump: 'patch',
 }
 
-function ensureConfig() {
+export const Config = z.object({
+  tokenFile: z.string().default(CONFIG_FALLBACK.tokenFile),
+  registry: z.string().default(CONFIG_FALLBACK.registry),
+  repo: z.string().default(CONFIG_FALLBACK.repo),
+  ghBin: z.string().default(CONFIG_FALLBACK.ghBin),
+  ghConfigDir: z.string().default(CONFIG_FALLBACK.ghConfigDir),
+  bump: z.string().default(CONFIG_FALLBACK.bump),
+})
+
+function writeConfig(config) {
+  const previous = (() => {
+    try {
+      return JSON.parse(readFileSync(CONFIG_PATH, 'utf8'))
+    } catch {
+      return {}
+    }
+  })()
+  const next = { ...CONFIG_FALLBACK, ...previous }
+  for (const key of Object.keys(CONFIG_FALLBACK)) {
+    const value = config && typeof config[key] === 'string' ? config[key].trim() : ''
+    if (value !== '') next[key] = value
+  }
   try {
-    if (existsSync(CONFIG_PATH)) return
     mkdirSync(path.dirname(CONFIG_PATH), { recursive: true })
-    writeFileSync(CONFIG_PATH, `${JSON.stringify(CONFIG_DEFAULTS, null, 2)}\n`, 'utf8')
+    writeFileSync(CONFIG_PATH, `${JSON.stringify(next, null, 2)}\n`, 'utf8')
   } catch {
     // A read-only environment still gets the skill; the script falls back to its own defaults.
   }
@@ -59,7 +80,10 @@ const provider = {
 export const name = 'plugin-publisher'
 export const inject = ['skills']
 
-export function apply(ctx) {
-  ensureConfig()
+export function apply(ctx, config) {
+  writeConfig(config)
+  ctx.inject(['settings'], (child) => {
+    child.effect(() => child.settings.configure({ auto: false }, ctx.fiber), 'plugin-publisher settings')
+  })
   ctx.skills.registerProvider(() => provider)
 }
