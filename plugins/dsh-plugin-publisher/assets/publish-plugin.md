@@ -11,18 +11,40 @@
 2. **npm 凭据**：发布需要 npm token。优先读环境变量 `NPM_TOKEN`，否则读 `%USERPROFILE%\.dsh\npm-token`（一行，纯 token）。没有就提示用户去 https://www.npmjs.com/settings/~/tokens 生成 **Granular Access Token（勾选 Bypass 2FA，Read and write）** 并写入该文件，不要把 token 贴进对话。
 3. **索引仓库**：确认要更新的精选索引（例如 `cuiyuan605/dsh-plugin-picks`，本地目录含 `docs/index.json`）以及 `gh` 是否已登录。
 
+## 配置
+
+首次启用会在 `~/.dsh/dsh-plugin-publisher.json` 写入默认配置；发布脚本读同一份文件，命令行参数优先。可配置项：
+
+| 字段 | 含义 |
+|---|---|
+| `tokenFile` | npm token 文件路径，默认 `~/.dsh/npm-token` |
+| `registry` | npm 源，默认 `https://registry.npmjs.org/` |
+| `repo` | 索引仓库 `owner/name` |
+| `ghBin` | `gh` 可执行文件路径（不在 PATH 时填） |
+| `ghConfigDir` | `GH_CONFIG_DIR`（gh 登录信息目录） |
+| `bump` | 默认递增方式 |
+
+示例：
+
+```json
+{
+  "tokenFile": "C:\\Users\\你\\.dsh\\npm-token",
+  "registry": "https://registry.npmjs.org/",
+  "repo": "cuiyuan605/dsh-plugin-picks",
+  "ghBin": "C:\\path\\to\\gh.exe",
+  "ghConfigDir": "C:\\path\\to\\.gh",
+  "bump": "patch"
+}
+```
+
 ## 执行
 
-在包目录外运行（PowerShell）：
+在包目录外运行（PowerShell，未配置的项再用手工参数覆盖）：
 
 ```powershell
 node "$env:DSH_PROFILE_DIR\node_modules\dsh-plugin-publisher\assets\scripts\release.mjs" `
   --dir <插件绝对路径> `
   --index <本地 docs/index.json 绝对路径> `
-  --bump patch `
-  --repo cuiyuan605/dsh-plugin-picks `
-  --gh-bin "C:\Users\11680\Desktop\dhs\tools\bin\gh.exe" `
-  --gh-config-dir "C:\Users\11680\Desktop\dhs\.gh" `
   --push
 ```
 
