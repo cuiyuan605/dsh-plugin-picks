@@ -1,6 +1,9 @@
 {
   "format": 1,
-  "title": { "en": "Curated DSH Plugins", "zh": "精选 DSH 插件" },
+  "title": {
+    "en": "Curated DSH Plugins",
+    "zh": "精选 DSH 插件"
+  },
   "description": {
     "en": "Hand-picked DeepSeek Harness plugins maintained by cuiyuan605.",
     "zh": "由 cuiyuan605 维护的 DeepSeek Harness 插件精选。"
@@ -8,7 +11,10 @@
   "plugins": [
     {
       "name": "dsh-message-box",
-      "title": { "en": "Message Box", "zh": "消息盒子" },
+      "title": {
+        "en": "Message Box",
+        "zh": "消息盒子"
+      },
       "description": {
         "en": "Finished conversations and pending approvals in one floating inbox; jump to the conversation or approve inline.",
         "zh": "把「对话执行完成」和「等待审批」收进一个可拖动的浮动收件箱，可跳转对话，也可直接在列表里审批。"
@@ -16,14 +22,58 @@
       "icon": "icons/dsh-message-box.svg",
       "author": "cuiyuan605",
       "homepage": "https://github.com/cuiyuan605/dsh-message-box",
-      "repository": { "url": "https://github.com/cuiyuan605/dsh-message-box" },
-      "keywords": ["message-box", "notifications", "approval", "inbox"],
+      "repository": {
+        "url": "https://github.com/cuiyuan605/dsh-message-box"
+      },
+      "keywords": [
+        "message-box",
+        "notifications",
+        "approval",
+        "inbox"
+      ],
       "versions": [
         {
           "version": "1.0.0",
           "publishTimestamp": 1793160403,
-          "source": { "type": "npm" },
-          "engines": { "dsh": ">=0.2.0-rc.2 <0.3.0-0" }
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dsh-plugin-publisher",
+      "title": {
+        "en": "Plugin Publisher",
+        "zh": "插件发布"
+      },
+      "description": {
+        "en": "Publish workflow as a skill: bump the version, publish to npm, and upsert the curated index.",
+        "zh": "把 DSH 插件发布流程封装成技能：递增版本、发布 npm、更新精选索引。"
+      },
+      "icon": "icons/dsh-plugin-publisher.svg",
+      "author": "cuiyuan605",
+      "homepage": "https://github.com/cuiyuan605/dsh-plugin-picks/tree/main/plugins/dsh-plugin-publisher",
+      "repository": {
+        "url": "https://github.com/cuiyuan605/dsh-plugin-picks",
+        "directory": "plugins/dsh-plugin-publisher"
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793169224,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/cuiyuan605/dsh-plugin-picks",
+            "commit": "eb0a9df48e0e9b82489ac206c9038e0b43b624ad",
+            "path": "plugins/dsh-plugin-publisher"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
         }
       ]
     }
