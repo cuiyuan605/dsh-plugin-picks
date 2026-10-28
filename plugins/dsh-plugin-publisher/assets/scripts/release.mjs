@@ -13,8 +13,18 @@ import { execSync } from 'node:child_process'
 import { homedir } from 'node:os'
 import path from 'node:path'
 
+/** Publisher settings written by the plugin; CLI flags override every value. */
+const CONFIG_PATH = path.join(homedir(), '.dsh', 'dsh-plugin-publisher.json')
+const DEFAULTS = (() => {
+  try {
+    return JSON.parse(readFileSync(CONFIG_PATH, 'utf8'))
+  } catch {
+    return {}
+  }
+})()
+
 function parseArgs(argv) {
-  const out = { bump: 'patch', publish: true, push: false }
+  const out = { bump: DEFAULTS.bump || 'patch', publish: true, push: false }
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i]
     if (arg === '--dir') out.dir = argv[++i]
@@ -22,6 +32,7 @@ function parseArgs(argv) {
     else if (arg === '--bump') out.bump = argv[++i]
     else if (arg === '--icon') out.icon = argv[++i]
     else if (arg === '--repo') out.repo = argv[++i]
+    else if (arg === '--token-file') out.tokenFile = argv[++i]
     else if (arg === '--gh-config-dir') out.ghConfigDir = argv[++i]
     else if (arg === '--gh-bin') out.ghBin = argv[++i]
     else if (arg === '--pm') out.pm = argv[++i]
@@ -58,15 +69,15 @@ const nextPkg = JSON.parse(await readFile(pkgPath, 'utf8'))
 
 // 2. publish to npm
 if (args.publish) {
-  const tokenFile = path.join(homedir(), '.dsh', 'npm-token')
+  const tokenFile = args.tokenFile || DEFAULTS.tokenFile || path.join(homedir(), '.dsh', 'npm-token')
   let token = process.env.NPM_TOKEN
   if (!token && existsSync(tokenFile)) token = (await readFile(tokenFile, 'utf8')).trim()
   if (!token) {
     throw new Error(
-      'npm token missing: set NPM_TOKEN or write a granular token (bypass 2FA, read/write) to ~/.dsh/npm-token',
+      `npm token missing: set NPM_TOKEN or write a granular token (bypass 2FA, read/write) to ${tokenFile}`,
     )
   }
-  const registry = 'https://registry.npmjs.org/'
+  const registry = DEFAULTS.registry || 'https://registry.npmjs.org/'
   run(
     `"${pm}" publish --registry ${registry} --//registry.npmjs.org/:_authToken=${token}`,
     { stdio: 'inherit' },
@@ -119,14 +130,16 @@ await writeFile(indexPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8')
 process.stderr.write(`index updated: ${indexPath} (${nextPkg.name}@${nextPkg.version})\n`)
 
 // 5. optionally push the index through the GitHub API
-if (args.push && args.repo) {
-  const gh = args.ghBin || (process.platform === 'win32' ? 'gh.exe' : 'gh')
+const repo = args.repo || DEFAULTS.repo
+if (args.push && repo) {
+  const gh = args.ghBin || DEFAULTS.ghBin || (process.platform === 'win32' ? 'gh.exe' : 'gh')
   const env = { ...process.env }
-  if (args.ghConfigDir) env.GH_CONFIG_DIR = path.resolve(args.ghConfigDir)
+  const ghConfigDir = args.ghConfigDir || DEFAULTS.ghConfigDir
+  if (ghConfigDir) env.GH_CONFIG_DIR = path.resolve(ghConfigDir)
   const remotePath = 'docs/index.json'
   let sha = ''
   try {
-    sha = execSync(`"${gh}" api repos/${args.repo}/contents/${remotePath} --jq .sha`, { env })
+    sha = execSync(`"${gh}" api repos/${repo}/contents/${remotePath} --jq .sha`, { env })
       .toString()
       .trim()
   } catch {
@@ -135,10 +148,10 @@ if (args.push && args.repo) {
   const content = Buffer.from(await readFile(indexPath)).toString('base64')
   const shaArg = sha ? ` -f sha=${sha}` : ''
   execSync(
-    `"${gh}" api -X PUT repos/${args.repo}/contents/${remotePath} -f message="Update index: ${nextPkg.name}@${nextPkg.version}" -f content=${content} -f branch=main${shaArg}`,
+    `"${gh}" api -X PUT repos/${repo}/contents/${remotePath} -f message="Update index: ${nextPkg.name}@${nextPkg.version}" -f content=${content} -f branch=main${shaArg}`,
     { env, stdio: 'inherit' },
   )
-  process.stderr.write(`index pushed to ${args.repo}\n`)
+  process.stderr.write(`index pushed to ${repo}\n`)
 }
 
 function readLocalizedMeta(pluginDir, locale) {
