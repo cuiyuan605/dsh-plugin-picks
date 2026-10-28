@@ -1,0 +1,3 @@
+- insert:
+    - id: plugin-publisher
+      name: 'dsh-plugin-publisher'
