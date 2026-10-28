@@ -1,0 +1,25 @@
+{
+  "name": "dsh-plugin-publisher",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Skill plugin that publishes a DSH plugin to npm and adds or updates its version in a curated plugin market index.",
+  "license": "MIT",
+  "keywords": ["dsh", "dsh-plugin", "publisher", "release", "npm", "market-index"],
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "assets",
+    "locale/*.json",
+    "icon.svg"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
