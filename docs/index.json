@@ -98,6 +98,107 @@
         }
       ],
       "icon": "icons/dsh-remote-assist.svg"
+    },
+    {
+      "name": "@smalltailqwq/dsh-client-ui-skin-maid-atelier",
+      "title": {
+        "en": "Abyssal Maid Atelier",
+        "zh": "深海女仆工坊"
+      },
+      "description": {
+        "en": "Two whale maids, navy lace and a chibi sidebar; mutually exclusive with ORCA LINK, install the skin manager too.",
+        "zh": "两位鲸鱼娘女仆、深海蓝蕾丝与 Q 版侧栏；与「虎鲸链路」互斥，建议同时安装皮肤管理器。"
+      },
+      "icon": "icons/maid-atelier.png",
+      "homepage": "https://github.com/Small-tailqwq/dsh-deep-whale/tree/main/maid-atelier",
+      "repository": {
+        "url": "https://github.com/Small-tailqwq/dsh-deep-whale",
+        "directory": "maid-atelier"
+      },
+      "keywords": [
+        "skin",
+        "whale",
+        "maid"
+      ],
+      "versions": [
+        {
+          "version": "0.1.9",
+          "publishTimestamp": 1792508088,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "@smalltailqwq/dsh-client-ui-skin-orca-link",
+      "title": {
+        "en": "ORCA LINK",
+        "zh": "虎鲸链路"
+      },
+      "description": {
+        "en": "A cool black-whale operator with a square-corner UI; mutually exclusive with the maid atelier, install the skin manager too.",
+        "zh": "酷酷的小黑鲸操作员、全直角界面；与「深海女仆工坊」互斥，建议同时安装皮肤管理器。"
+      },
+      "icon": "icons/orca-link.svg",
+      "homepage": "https://github.com/Small-tailqwq/dsh-deep-whale/tree/main/orca-link",
+      "repository": {
+        "url": "https://github.com/Small-tailqwq/dsh-deep-whale",
+        "directory": "orca-link"
+      },
+      "keywords": [
+        "skin",
+        "whale",
+        "orca"
+      ],
+      "versions": [
+        {
+          "version": "0.1.9",
+          "publishTimestamp": 1792507991,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "@smalltailqwq/dsh-client-ui-skin-deep-whale-manager",
+      "title": {
+        "en": "Skin Manager",
+        "zh": "皮肤管理器"
+      },
+      "description": {
+        "en": "Switch between installed skins, tune each skin, and keep only one active at a time.",
+        "zh": "切换已安装的皮肤、调整各皮肤选项，并保证同一时间只启用一套。"
+      },
+      "icon": "icons/skin-manager.svg",
+      "homepage": "https://github.com/Small-tailqwq/dsh-deep-whale/tree/main/skin-manager",
+      "repository": {
+        "url": "https://github.com/Small-tailqwq/dsh-deep-whale",
+        "directory": "skin-manager"
+      },
+      "keywords": [
+        "skin",
+        "manager"
+      ],
+      "versions": [
+        {
+          "version": "0.1.8",
+          "publishTimestamp": 1792507763,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ]
     }
   ]
 }
