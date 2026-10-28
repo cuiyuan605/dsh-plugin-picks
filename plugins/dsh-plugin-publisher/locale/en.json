@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Plugin Publisher",
+    "description": "Publish workflow as a skill: bump the version, publish to npm, and upsert the release into a curated plugin market index."
+  }
+}
