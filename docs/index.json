@@ -63,12 +63,12 @@
       },
       "versions": [
         {
-          "version": "0.1.0",
-          "publishTimestamp": 1793169224,
+          "version": "0.1.1",
+          "publishTimestamp": 1793169455,
           "source": {
             "type": "git",
             "url": "https://github.com/cuiyuan605/dsh-plugin-picks",
-            "commit": "eb0a9df48e0e9b82489ac206c9038e0b43b624ad",
+            "commit": "debd954527a061439f8a6007e26e20605eae2df3",
             "path": "plugins/dsh-plugin-publisher"
           },
           "engines": {
