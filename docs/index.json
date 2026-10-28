@@ -76,6 +76,28 @@
           }
         }
       ]
+    },
+    {
+      "name": "dsh-remote-assist",
+      "title": {
+        "en": "Remote Assist",
+        "zh": "远程协助"
+      },
+      "description": "Remote Assist for DeepSeek Harness: share this DSH on the LAN, or open and control another DSH's full interface from a side panel.",
+      "author": "cuiyuan605",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "publishTimestamp": 1793170265,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ],
+      "icon": "icons/dsh-remote-assist.svg"
     }
   ]
 }
