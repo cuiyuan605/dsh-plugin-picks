@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>精选 DSH 插件</title>
+<style>
+  :root{--bg:#f6f8fb;--card:#fff;--text:#18222e;--muted:#5b6b7c;--line:#e3e9f0;--accent:#1d7fb4;--code:#eef4f9}
+  @media (prefers-color-scheme:dark){:root{--bg:#0d141b;--card:#131e27;--text:#e8f1f8;--muted:#93a7b8;--line:#243442;--accent:#6fcdf5;--code:#0a1219}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 "Segoe UI",system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:56px 20px 80px}
+  header h1{margin:0 0 8px;font-size:30px;letter-spacing:.5px}
+  header p{margin:0;color:var(--muted)}
+  .indexbox{margin:28px 0 36px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+  .indexbox h2{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--muted)}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  code{background:var(--code);padding:6px 9px;border-radius:8px;font:13px/1.4 ui-monospace,Consolas,monospace;word-break:break-all}
+  button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  .step{color:var(--muted);font-size:13px;margin-top:10px}
+  .card{display:flex;gap:16px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--card);margin-bottom:16px}
+  .card img{width:56px;height:56px;border-radius:12px;flex:none}
+  .card h3{margin:0 0 4px;font-size:17px}
+  .card p{margin:0 0 10px;color:var(--muted);font-size:14px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:10px}
+  .tag{border:1px solid var(--line);border-radius:999px;padding:2px 9px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;font-size:13px}
+  footer{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>精选 DSH 插件</h1>
+    <p>由 cuiyuan605 维护的 DeepSeek Harness 插件精选。它本身也是一个插件市场索引，可直接加进 DSH 的「发现」。</p>
+  </header>
+
+  <section class="indexbox">
+    <h2>索引源地址</h2>
+    <div class="row">
+      <code id="index-url">https://cuiyuan605.github.io/dsh-plugin-picks/index.json</code>
+      <button onclick="copyIndex()">复制</button>
+    </div>
+    <div class="step">用法：插件 → 发现 → 添加索引源，粘贴上面的地址（需先开启「自定义插件市场」）。</div>
+  </section>
+
+  <main id="list">
+    <article class="card">
+      <img src="icons/dsh-message-box.svg" alt="消息盒子图标">
+      <div>
+        <h3>消息盒子 <span style="color:var(--muted);font-size:13px;font-weight:400">dsh-message-box</span></h3>
+        <p>把「对话执行完成」和「等待审批」收进一个可拖动的浮动收件箱，可跳转对话，也可直接在列表里审批。</p>
+        <div class="meta">
+          <span class="tag">v1.0.0</span>
+          <span class="tag">审批</span>
+          <span class="tag">通知</span>
+          <span class="tag">可拖动</span>
+        </div>
+        <div class="actions">
+          <a href="https://github.com/cuiyuan605/dsh-message-box" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://www.npmjs.com/package/dsh-message-box" target="_blank" rel="noreferrer">npm</a>
+          <a href="#" onclick="copyCmd();return false">复制安装命令</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    索引格式为 DSH plugin market index format 1。新增插件请更新 <code>docs/index.json</code> 与 <code>docs/icons/</code>，推送后 GitHub Pages 自动重建。
+  </footer>
+</div>
+<script>
+function copyIndex(){copyText(document.getElementById('index-url').textContent)}
+function copyCmd(){copyText("dsh plugin --profile web add 'dsh-message-box'")}
+function copyText(t){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>flash(),()=>fallback(t))}
+  else fallback(t)
+}
+function fallback(t){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();flash()}
+function flash(){const b=document.createElement('div');b.textContent='已复制';b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d7fb4;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;z-index:9';document.body.appendChild(b);setTimeout(()=>b.remove(),1200)}
+</script>
+</body>
+</html>
