@@ -16,8 +16,8 @@
         "zh": "消息盒子"
       },
       "description": {
-        "en": "Finished conversations and pending approvals in one floating inbox; jump to the conversation or approve inline.",
-        "zh": "把「对话执行完成」和「等待审批」收进一个可拖动的浮动收件箱，可跳转对话，也可直接在列表里审批。"
+        "en": "Finished conversations and pending approvals in one draggable floating inbox, with Chinese approval explanations, inline approval, outside-click close and bottom-right anchoring.",
+        "zh": "把「对话执行完成」和「等待审批」收进一个可拖动的浮动收件箱：中文解释审批内容，可跳转对话、直接审批，点外面自动收起，位置锚定右下角。"
       },
       "icon": "icons/dsh-message-box.svg",
       "author": "cuiyuan605",
