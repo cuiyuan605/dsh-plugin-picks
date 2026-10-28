@@ -10,7 +10,7 @@
 import { readFile, writeFile, copyFile, mkdir } from 'node:fs/promises'
 import { existsSync, readFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
-import { homedir } from 'node:os'
+import { homedir, tmpdir } from 'node:os'
 import path from 'node:path'
 
 /** Publisher settings written by the plugin; CLI flags override every value. */
@@ -52,6 +52,8 @@ const indexPath = path.resolve(args.index)
 const pkgPath = path.join(dir, 'package.json')
 const pkg = JSON.parse(await readFile(pkgPath, 'utf8'))
 const pm = args.pm || (process.platform === 'win32' ? 'npm.cmd' : 'npm')
+/** Quote only when the executable path contains spaces; quoting a bare `npm.cmd` breaks its %~dp0. */
+const pmCommand = /\s/.test(pm) ? `"${pm}"` : pm
 
 if (!pkg.name) throw new Error('package.json has no name')
 if (!pkg.dsh || !pkg.dsh.bundle) throw new Error(`${pkg.name}: package.json does not declare dsh.bundle`)
@@ -63,7 +65,7 @@ const run = (command, options = {}) => {
 
 // 1. bump version
 if (args.bump !== 'none') {
-  run(`"${pm}" version ${args.bump} --no-git-tag-version`)
+  run(`${pmCommand} version ${args.bump} --no-git-tag-version`)
 }
 const nextPkg = JSON.parse(await readFile(pkgPath, 'utf8'))
 
@@ -79,7 +81,7 @@ if (args.publish) {
   }
   const registry = DEFAULTS.registry || 'https://registry.npmjs.org/'
   run(
-    `"${pm}" publish --registry ${registry} --//registry.npmjs.org/:_authToken=${token}`,
+    `${pmCommand} publish --registry ${registry} --//registry.npmjs.org/:_authToken=${token}`,
     { stdio: 'inherit' },
   )
 }
@@ -146,11 +148,17 @@ if (args.push && repo) {
     sha = ''
   }
   const content = Buffer.from(await readFile(indexPath)).toString('base64')
-  const shaArg = sha ? ` -f sha=${sha}` : ''
-  execSync(
-    `"${gh}" api -X PUT repos/${repo}/contents/${remotePath} -f message="Update index: ${nextPkg.name}@${nextPkg.version}" -f content=${content} -f branch=main${shaArg}`,
-    { env, stdio: 'inherit' },
-  )
+  const bodyPath = path.join(tmpdir(), `dsh-index-${Date.now()}.json`)
+  await writeFile(bodyPath, JSON.stringify({
+    message: `Update index: ${nextPkg.name}@${nextPkg.version}`,
+    content,
+    branch: 'main',
+    ...(sha ? { sha } : {}),
+  }), 'utf8')
+  execSync(`"${gh}" api -X PUT repos/${repo}/contents/${remotePath} --input "${bodyPath}"`, {
+    env,
+    stdio: 'inherit',
+  })
   process.stderr.write(`index pushed to ${repo}\n`)
 }
 
