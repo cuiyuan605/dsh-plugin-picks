@@ -309,6 +309,28 @@
           }
         }
       ]
+    },
+    {
+      "name": "dsh-remote-files",
+      "title": {
+        "en": "Remote Files",
+        "zh": "远程文件"
+      },
+      "description": "Browse and download files from the remote DSH host while connected through Remote Assist.",
+      "author": "cuiyuan605",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "publishTimestamp": 1793261736,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.3.0-0"
+          }
+        }
+      ],
+      "icon": "icons/dsh-remote-files.svg"
     }
   ]
 }
